@@ -1,4 +1,11 @@
-# AirBnB Clone - The Console
+# AirBnB Clone V.3 - RESTful API
+
+## Synopsis
+This is the 3rd version of our AirBnB clone project. We will be using a REST API and Flask
+
+![image](https://github.com/darkares23/AirBnB_clone_v3/blob/master/Air_BnB_v3.png)
+
+#### AirBnB Clone - The Console
 The console is the first segment of the AirBnB project at Holberton School that will collectively cover fundamental concepts of higher level programming. The goal of AirBnB project is to eventually deploy our server a simple copy of the AirBnB Website(HBnB). A command interpreter is created in this segment to manage objects for the AirBnB(HBnB) website.
 
 #### Functionalities of this command interpreter:
@@ -154,9 +161,9 @@ EOF  all  create  destroy  help  quit  show  update
 No known bugs at this time. 
 
 ## Authors
-Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
-Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
+Alejandro Arbelaez - [Github](https://github.com/AlejandroArbelaez21) / [Twitter](https://twitter.com/Alejand11345909)  
+Juan Sebastian Ocampo - [Github](https://github.com/darkares23) / [Twitter](https://twitter.com/JuanOcaDev)
 
-Second part of Airbnb: Joann Vuong
+Second part of Airbnb: Alexa Orrico and Jennifer Huang
 ## License
-Public Domain. No copy write protection. 
+Public Domain. No copy write protection.

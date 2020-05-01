@@ -85,20 +85,3 @@ def post_amenityw(place_id=None, amenity_id=None):
             place.amenity_ids.append(amenity_id)
             storage.save()
             return jsonify(put_amenity.to_dict(), 201)
-
-
-@app_views.route('/reviews/<review_id>', methods=['PUT'], strict_slashes=False)
-def put_review(review_id=None):
-    """Updates a Review object"""
-    id_review = storage.get('Review', review_id)
-    if id_review is None:
-        abort(404)
-    res = request.get_json()
-    if res is None:
-        abort(400, "Not a JSON")
-    for k, v in res.items():
-        if k != 'id' and k != 'created_at' and \
-           k != 'updated_at' and k != 'user_id' and k != 'place_id':
-            setattr(id_review, k, v)
-    storage.save()
-    return jsonify(id_review.to_dict()), 200

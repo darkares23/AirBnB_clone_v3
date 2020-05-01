@@ -8,6 +8,7 @@ from models.review import Review
 from models.place import Place
 from models.user import User
 from api.v1.views import app_views
+from os import getenv
 
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET'],
@@ -33,14 +34,30 @@ def one_review(review_id=None):
     return jsonify(a_review.to_dict())
 
 
-@app_views.route('/reviews/<review_id>', methods=['DELETE'],
-                 strict_slashes=False)
-def delete_review(review_id=None):
-    """Deletes a Review object"""
-    del_review = storage.get('Review', review_id)
-    if del_review is None:
+@app_views.route('places/<place_id>/amenities/<amenity_id>',
+                 methods=['DELETE'], strict_slashes=False)
+def delete_amenity(place_id=None, amenity_id=None):
+    """Deletes a amenity object"""
+    place = storage.get('Place', place_id)
+    del_amenity = storage.get('Amenity', amenity_id)
+    if del_amenity is None:
         abort(404)
-    storage.delete(del_review)
+    if place is None:
+        abort(404)
+    for amen in place.amenities:
+        if amenity_id not in amen.id:
+            abort(404)
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        if del_amenity not in place.amenities:
+            abort(404)
+        else:
+            place.amenities.remove(del_amenity)
+    else:
+        if amenity_id not in place.amenity_ids:
+            abort(404)
+        else:
+            place.amenity_ids.delete(amenity_id)
+    place.amenities.remove(del_amenity)
     storage.save()
     return jsonify({}), 200
 

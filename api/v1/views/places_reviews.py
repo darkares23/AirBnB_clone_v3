@@ -1,37 +1,25 @@
 #!/usr/bin/python3
 """Create a new view for Review object that handles all default RestFul API"""
-
-
 from flask import jsonify, abort, request
 from models import storage
 from models.review import Review
-from models.place import Place
-from models.user import User
+from models.amenity import Amenity
 from api.v1.views import app_views
 from os import getenv
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['GET'],
+@app_views.route('places/<place_id>/amenities', methods=['GET'],
                  strict_slashes=False)
-def review_places(place_id=None):
+def amenities_places(place_id=None):
     """Retrieves the list of all Review objects of a Place"""
-    review_pla = storage.get('Place', place_id)
-    if review_pla is None:
+    ameni_pla = storage.get('Place', place_id)
+    amen = ameni_pla.amenities
+    if ameni_pla is None:
         abort(404)
-    all_review = review_pla.reviews
-    list_review = []
-    for rev in all_review:
-        list_review.append(rev.to_dict())
-    return jsonify(list_review)
-
-
-@app_views.route('/reviews/<review_id>', methods=['GET'], strict_slashes=False)
-def one_review(review_id=None):
-    """Retrieves a Review object."""
-    a_review = storage.get('Review', review_id)
-    if a_review is None:
-        abort(404)
-    return jsonify(a_review.to_dict())
+    list_amenities = []
+    for amenity in amen:
+        list_amenities.append(amenity.to_dict())
+    return jsonify(list_amenities)
 
 
 @app_views.route('places/<place_id>/amenities/<amenity_id>',
@@ -40,13 +28,10 @@ def delete_amenity(place_id=None, amenity_id=None):
     """Deletes a amenity object"""
     place = storage.get('Place', place_id)
     del_amenity = storage.get('Amenity', amenity_id)
-    if del_amenity is None:
+    id_a = "Amenity.{}".format(amenity_id)
+    id_p = "Place.{}".format(place_id)
+    if (id_a not in del_amenity.keys() or id_p not in place.keys()):
         abort(404)
-    if place is None:
-        abort(404)
-    for amen in place.amenities:
-        if amenity_id not in amen.id:
-            abort(404)
     if getenv("HBNB_TYPE_STORAGE") == "db":
         if del_amenity not in place.amenities:
             abort(404)

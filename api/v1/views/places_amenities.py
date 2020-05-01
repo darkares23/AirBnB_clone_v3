@@ -6,7 +6,7 @@ from flask import jsonify, abort, request, make_response
 from models import storage
 from models.place import Place
 from api.v1.views import app_views
-import os
+from os import getenv
 
 
 @app_views.route('/places/<place_id>/amenities',
@@ -33,11 +33,12 @@ def delete_ameny(place_id=None, amenity_id=None):
     dic_places = storage.all(Place)
     amenities_id = "Amenity." + amenity_id
     places_id = "Place." + place_id
-    if (amenities_id not in dic_amenities.keys() or places_id not in dic_places.keys()):
-        abort(404)
     ob_amenities = storage.get(Amenity, amenity_id)
     ob_places = storage.get(Place, place_id)
-    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+    if (amenities_id not in dic_amenities.keys() or
+       places_id not in dic_places.keys()):
+        abort(404)
+    if getenv("HBNB_TYPE_STORAGE") == "db":
         if ob_amenities not in ob_places.amenities:
             abort(404)
         else:
@@ -59,11 +60,12 @@ def post_revi(place_id, amenity_id):
     d_places = storage.all(Place)
     id_amenities = "Amenity." + amenity_id
     id_places = "Place." + place_id
-    if (id_amenities not in d_amenities.keys() or id_places not in d_places.keys()):
-        abort(404)
     amenities_ob = storage.get(Amenity, amenity_id)
     places_ob = storage.get(Place, place_id)
-    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+    if (id_amenities not in d_amenities.keys() or
+       id_places not in d_places.keys()):
+        abort(404)
+    if getenv("HBNB_TYPE_STORAGE") == "db":
         if amenities_ob in places_ob.amenities:
             return jsonify(amenities_ob.to_dict())
         else:

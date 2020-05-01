@@ -62,28 +62,29 @@ def delete_amenity(place_id=None, amenity_id=None):
     return jsonify({}), 200
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['POST'],
+@app_views.route('places/<place_id>/amenities/<amenity_id>', methods=['POST'],
                  strict_slashes=False)
-def post_review(place_id=None):
-    """Creates a Review"""
-    places = storage.get('Place', place_id)
-    if places is None:
+def post_amenityw(place_id=None, amenity_id=None):
+    """Creates a amenity"""
+    place = storage.get('Place', place_id)
+    put_amenity = storage.get('Amenity', amenity_id)
+    if put_amenity is None:
         abort(404)
-    res = request.get_json()
-    if res is None:
-        abort(400, "Not a JSON")
-    if 'user_id' not in res.keys():
-        abort(400, "Missing user_id")
-    id_user = storage.get('User', res['user_id'])
-    if id_user is None:
+    if place is None:
         abort(404)
-    if 'text' not in res.keys():
-        abort(400, "Missing text")
-    res['place_id'] = place_id
-    newReview = Review(**res)
-    storage.new(newReview)
-    storage.save()
-    return jsonify(newReview.to_dict()), 201
+    for amen in place.amenities:
+        if amenity_id not in amen.id:
+            abort(404)
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        if put_amenity not in place.amenities:
+            abort(404)
+        else:
+            place.amenities.remove(put_amenity)
+    else:
+        if amenity_id in place.amenity_ids:
+            place.amenity_ids.append(amenity_id)
+            storage.save()
+            return jsonify(put_amenity.to_dict(), 201)
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'], strict_slashes=False)

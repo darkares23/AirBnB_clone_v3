@@ -71,9 +71,9 @@ def post_revi(place_id, amenity_id):
         else:
             obj_place.amenities.append(amenity_obj)
             storage.save()
-            return jsonify(obj_amenity.to_dict(), 201)
+            return jsonify(amenity_obj.to_dict(), 201)
     else:
         if amenity_id in obj_place.amenity_ids:
             obj_place.amenity_ids.append(amenity_id)
             storage.save()
-            return jsonify(obj_amenity.to_dict(), 201)
+            return jsonify(amenity_obj.to_dict(), 201)

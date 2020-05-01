@@ -27,13 +27,13 @@ def amenities_places(place_id=None):
 def delete_ameny(place_id, amenity_id):
     """delete amenity"""
     dic_amenity = storage.all(Amenity)
-    dic_place = storage.all('Place')
+    dic_place = storage.all(Place)
     id_ame = "Amenity." + amenity_id
     id_pla = "Place." + place_id
     if (id_ame not in dic_amenity.keys() or id_pla not in dic_place.keys()):
         abort(404)
     obj_amenity = storage.get(Amenity, amenity_id)
-    obj_place = storage.get('Place', place_id)
+    obj_place = storage.get(Place, place_id)
     if os.getenv("HBNB_TYPE_STORAGE") == "db":
         if obj_amenity not in obj_place.amenities:
             abort(404)
